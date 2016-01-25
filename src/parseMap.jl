@@ -130,13 +130,17 @@ function parse_highway(attr::OSMattributes, k::@compat(AbstractString), v::@comp
         attr.lanes = @compat parse(Int,v)
     elseif k == "maxspeed" 
         m = match(r"([0-9]+)\s?(\w*)",v)
-        units = m.captures[2]
-        if units == "" # default kph
-            attr.maxspeed = parse(Float64, m.captures[1])
-        elseif units == "mph"
-            attr.maxspeed = 1.609*parse(Float64, m.captures[1])
+        if m == nothing
+            warn("Unrecognized maxspeed: $v")
         else
-            error("unrecognized speed units: $units")
+            units = m.captures[2]
+            if units == "" # default kph
+                attr.maxspeed = parse(Float64, m.captures[1])
+            elseif units == "mph"
+                attr.maxspeed = 1.609*parse(Float64, m.captures[1])
+            else
+                warn("unrecognized speed units: $units")
+            end
         end
     else
         return
