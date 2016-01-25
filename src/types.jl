@@ -10,6 +10,7 @@ type Highway
     @compat cycleway::AbstractString    # Cycleway classifier, if available
     @compat bicycle::AbstractString     # Bicycle classifier, if available
     @compat name::AbstractString        # Name, if available
+    maxspeed::Float64       # Speed limit in kph
     nodes::Vector{Int}  # List of nodes
 end
 

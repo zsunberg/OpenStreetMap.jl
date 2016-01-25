@@ -15,6 +15,7 @@ type OSMattributes
     cycleway::UTF8String
     sidewalk::UTF8String
     bicycle::UTF8String
+    maxspeed::Float64
 
     # XML elements
     element::Symbol # :None, :Node, :Way, :Tag[, :Relation]
@@ -26,7 +27,7 @@ type OSMattributes
     lon::Float64 # Uninitialized
 
     OSMattributes() = new(false,false,false,false,1,
-                          "","","","","","",:None,:None,[])
+                          "","","","","","",-1.0,:None,:None,[])
 end
 
 type OSMdata
@@ -127,6 +128,16 @@ function parse_highway(attr::OSMattributes, k::@compat(AbstractString), v::@comp
         attr.bicycle = v
     elseif k == "lanes" && length(v)==1 && '1' <= v[1] <= '9'
         attr.lanes = @compat parse(Int,v)
+    elseif k == "maxspeed" 
+        m = match(r"([0-9]+)\s?(\w*)",v)
+        units = m.captures[2]
+        if units == "" # default kph
+            attr.maxspeed = parse(Float64, m.captures[1])
+        elseif units == "mph"
+            attr.maxspeed = 1.609*parse(Float64, m.captures[1])
+        else
+            error("unrecognized speed units: $units")
+        end
     else
         return
     end
@@ -184,7 +195,7 @@ function collectValues(handler::LibExpat.XPStreamHandler, name::@compat(Abstract
             osm.highways[attr.id] = Highway(attr.class, attr.lanes,
                                             (attr.oneway && !attr.oneway_override),
                                             attr.sidewalk, attr.cycleway, attr.bicycle,
-                                            attr.name, copy(attr.way_nodes))
+                                            attr.name, attr.maxspeed, copy(attr.way_nodes))
         end
     else # :Tag or :Nd (don't reset values!)
         return
