@@ -1,3 +1,5 @@
+**THIS IS A FORK I CREATED FOR MY OWN RESEARCH PURPOSES**
+
 ## OpenStreetMap.jl
 
 [![Build Status](https://travis-ci.org/tedsteiner/OpenStreetMap.jl.svg)](https://travis-ci.org/tedsteiner/OpenStreetMap.jl)
