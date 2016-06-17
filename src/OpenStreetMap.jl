@@ -10,7 +10,7 @@ using Reexport
 @reexport using Geodesy
 using LightXML
 using LibExpat
-using Winston
+# using Winston
 using Graphs
 using Compat
 
@@ -35,14 +35,14 @@ include("highways.jl")
 include("features.jl")
 include("buildings.jl")
 
-include("crop.jl")
-include("plot.jl")
+# include("crop.jl")
+# include("plot.jl")
 include("intersections.jl")
-include("transforms.jl")
+# include("transforms.jl")
 include("routing.jl")
 
 include("simulate.jl")
 
-include("deprecated.jl")
+# include("deprecated.jl")
 
 end # module OpenStreetMap
